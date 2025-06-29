@@ -69,7 +69,30 @@ class MainActivity : ComponentActivity() {
             RetrofitExampleTheme {
                 Scaffold(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            containerColor = Red,
+                            onClick = {
+                                //POST
+                                val data = PostsItem(
+                                    body = "Rohan is a very good boy of this entire universe",
+                                    id = 933,
+                                    title="Testing Post request",
+                                    userId = 33
+                                )
+                                viewmodel.value.createPosts(data,applicationContext)
+
+//                                Toast.makeText(applicationContext,"it is working", Toast.LENGTH_SHORT).show()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = null
+                            )
+                        }
+                    }
+
                 ) { innerPadding ->
 
                     if (isLoading.value) {
