@@ -11,5 +11,7 @@ interface ApiService {
     suspend fun getPosts() : List<PostsItem>
 
 
+    @POST("posts")
+    suspend fun ceatePost(@Body updatedData: PostsItem) : PostsItem
 
 }

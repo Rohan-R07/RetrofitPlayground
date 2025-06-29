@@ -1,5 +1,7 @@
 package com.example.retrofitexample.ViewModels
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -18,13 +20,16 @@ class RetroViewModel : ViewModel() {
 
     val couldntLoad = MutableStateFlow(false)
 
+    private val _updatedPost = MutableStateFlow<PostsItem?>(null)
+    val updatedPost = _updatedPost
+
     init {
         fetchPosts()
     }
 
-     fun fetchPosts() {
+    fun fetchPosts() {
         viewModelScope.launch {
-        isLoading.value = true
+            isLoading.value = true
 //                isLoading.value = true
             try {
                 val data = GetInstance.api.getPosts()
@@ -39,5 +44,21 @@ class RetroViewModel : ViewModel() {
 
 
     }
+
+
+    fun createPosts(updatedData: PostsItem,contex: Context) {
+        viewModelScope.launch {
+            try {
+                val result = GetInstance.api.ceatePost(updatedData)
+                _updatedPost.value = result
+                Toast.makeText(contex,"Yes working", Toast.LENGTH_SHORT).show()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(contex,"Not working ", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
 }
