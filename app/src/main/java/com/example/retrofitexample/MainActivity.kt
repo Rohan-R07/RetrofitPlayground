@@ -25,13 +25,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,6 +63,7 @@ class MainActivity : ComponentActivity() {
 
     val viewmodel = viewModels<RetroViewModel>()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -84,17 +89,34 @@ class MainActivity : ComponentActivity() {
                                 // POST
                                 dialogState.value = true
 
-                            }
+                            },
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = null
                             )
                         }
+                    },
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = { Text("Retrofit") },
+                            actions = {
+                                IconButton(
+                                    onClick = {
+                                        viewmodel.value.deletePost(5, applicationContext)
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        )
                     }
 
                 ) { innerPadding ->
-                    if(dialogState.value){
+                    if (dialogState.value) {
                         Dialogue(
                             dialog = dialogState,
                             body = body,
@@ -155,8 +177,6 @@ fun MainUi(viewMOdel: RetroViewModel, innerPadding: PaddingValues) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(postslist.value) { items ->
-
-            Spacer(Modifier.padding(10.dp))
 
             Card(
                 modifier = Modifier
