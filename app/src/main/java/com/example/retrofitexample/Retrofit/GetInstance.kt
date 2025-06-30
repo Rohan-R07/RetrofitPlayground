@@ -16,6 +16,8 @@ object GetInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
+
     }
+
 
 }

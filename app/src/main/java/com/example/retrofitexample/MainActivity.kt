@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -65,7 +66,13 @@ class MainActivity : ComponentActivity() {
             var isLoading = viewmodel.value.isLoading.collectAsState()
             val circularProgression = remember { mutableStateOf(false) }
 
-//            var floatingAction by remember { mutableStateOf(false) }
+            var dialogState = remember { mutableStateOf(false) }
+
+            var body = remember { mutableStateOf("") }
+            var title = remember { mutableStateOf("") }
+            var userId = remember { mutableIntStateOf(0) }
+
+
             RetrofitExampleTheme {
                 Scaffold(
                     modifier = Modifier
@@ -74,16 +81,9 @@ class MainActivity : ComponentActivity() {
                         FloatingActionButton(
                             containerColor = Red,
                             onClick = {
-                                //POST
-                                val data = PostsItem(
-                                    body = "Rohan is a very good boy of this entire universe",
-                                    id = 933,
-                                    title="Testing Post request",
-                                    userId = 33
-                                )
-                                viewmodel.value.createPosts(data,applicationContext)
+                                // POST
+                                dialogState.value = true
 
-//                                Toast.makeText(applicationContext,"it is working", Toast.LENGTH_SHORT).show()
                             }
                         ) {
                             Icon(
@@ -94,6 +94,17 @@ class MainActivity : ComponentActivity() {
                     }
 
                 ) { innerPadding ->
+                    if(dialogState.value){
+                        Dialogue(
+                            dialog = dialogState,
+                            body = body,
+                            title = title,
+                            userIDN = userId,
+                            viewModel = viewmodel.value,
+                            contex = applicationContext
+                        )
+                    }
+
 
                     if (isLoading.value) {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -120,7 +131,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     } else {
-                        MainUi(viewmodel.value,innerPadding)
+                        MainUi(viewmodel.value, innerPadding)
 
                     }
                     Log.d("ISLOADINF", isLoading.value.toString())
@@ -132,12 +143,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainUi(viewMOdel: RetroViewModel,innerPadding : PaddingValues) {
+fun MainUi(viewMOdel: RetroViewModel, innerPadding: PaddingValues) {
 
     val postslist = viewMOdel.posts.collectAsState(emptyList<PostsItem>())
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(innerPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -23,6 +23,8 @@ class RetroViewModel : ViewModel() {
     private val _updatedPost = MutableStateFlow<PostsItem?>(null)
     val updatedPost = _updatedPost
 
+    var deletePost = MutableStateFlow<PostsItem?>(null)
+
     init {
         fetchPosts()
     }
@@ -60,5 +62,12 @@ class RetroViewModel : ViewModel() {
         }
     }
 
+
+    fun deletablePosts(deletedItem: PostsItem){
+        viewModelScope.launch {
+            val deletedItem = GetInstance.api.deletePost(deletedItem)
+            deletePost.value = deletedItem
+        }
+    }
 
 }
