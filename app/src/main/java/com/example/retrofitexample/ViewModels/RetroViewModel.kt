@@ -9,12 +9,15 @@ import com.example.retrofitexample.DataModel.PostsItem
 import com.example.retrofitexample.Retrofit.GetInstance
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.Response
 
 class RetroViewModel : ViewModel() {
 
     private val _posts = MutableStateFlow<List<PostsItem>>(emptyList())
     val posts = _posts
 
+    private val _deletePost = MutableStateFlow<PostsItem?>(null)
+    val deleePost = _deletePost
 
     val isLoading = MutableStateFlow(false)
 
@@ -23,6 +26,7 @@ class RetroViewModel : ViewModel() {
     private val _updatedPost = MutableStateFlow<PostsItem?>(null)
     val updatedPost = _updatedPost
 
+
     init {
         fetchPosts()
     }
@@ -30,7 +34,6 @@ class RetroViewModel : ViewModel() {
     fun fetchPosts() {
         viewModelScope.launch {
             isLoading.value = true
-//                isLoading.value = true
             try {
                 val data = GetInstance.api.getPosts()
                 _posts.value = data
@@ -60,5 +63,30 @@ class RetroViewModel : ViewModel() {
         }
     }
 
+    fun deletePost(id: Int,contex: Context){
+        viewModelScope.launch {
+            try {
+                val delete = GetInstance.api.deletePosts(id)
+                if (delete.isSuccessful)
+                {
+                    Toast.makeText(contex,"Working Bro", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(contex,"Not Working Bro ${delete.code()}", Toast.LENGTH_SHORT).show()
+
+                }
+
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+//    fun deletablePosts(deletedItem: PostsItem){
+//        viewModelScope.launch {
+//            val deletedItem = GetInstance.api.deletePost(deletedItem)
+//            deletePost.value = deletedItem
+//        }
+//    }
 
 }
