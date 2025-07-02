@@ -32,12 +32,14 @@ It uses the [JSONPlaceholder](https://jsonplaceholder.typicode.com/) free REST A
 
 ---
 
-## 📸 Screenshots
+## 📸 Screen-Recording
 | Home - GET | POST/DELETE actions |
 |------------|---------------------|
-| ![screenshot1](assets/screenshot1.png) | ![screenshot2](assets/screenshot2.png) |
 
-(Replace with your screenshots)
+
+
+https://github.com/user-attachments/assets/cd079377-1abe-4e09-8442-7f32aff4e423
+
 
 ---
 
